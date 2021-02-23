@@ -18,8 +18,8 @@ class CheckoutViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        lbTotalsFrete.text = "Total carrinho: R$\(somaTotal())"
-        lbTotalcFrete.text = "Total com Frete: R$\(somaTotal()+5.99)"
+        lbTotalsFrete.text = "Total carrinho: R$\(String(format: "%.02f", somaTotal()))"
+        lbTotalcFrete.text = "Total com Frete: R$\(String(format: "%.02f", somaTotal()+5.99))"
     }
     
     func somaTotal() -> Double {
@@ -33,12 +33,12 @@ class CheckoutViewController: UIViewController {
     }
     
     @IBAction func checkout(_ sender: UIButton) {
-        var total: Double
+        var total: String
         var pagamento: String = ""
         if swEntrega.isOn {
-            total = somaTotal()
+            total = String(format: "%.02f", somaTotal())
         } else {
-            total = somaTotal()+5.99
+            total = String(format: "%.02f", somaTotal()+5.99)
         }
         switch scPagamento.selectedSegmentIndex {
         case 0:
@@ -51,7 +51,7 @@ class CheckoutViewController: UIViewController {
         showAlert(total, pagamento)
     }
     
-    func showAlert(_ total: Double, _ pagamento: String) {
+    func showAlert(_ total: String, _ pagamento: String) {
         let alert = UIAlertController(title: "Compra finalizada com Sucesso", message: "Total da compra: \(total) / Forma de pagamento: \(pagamento)", preferredStyle: .alert)
         
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: {_ in

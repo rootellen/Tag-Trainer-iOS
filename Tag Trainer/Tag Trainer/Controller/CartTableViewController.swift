@@ -79,9 +79,28 @@ class CartTableViewController: UITableViewController {
         for i in produtos {
             total += Double(i.getTotalPrice())
         }
-        return "Total: R$ \(total)"
+        return "Total: \(String(format: "%.02f", total))"
     }
     
+    //Toast
+    func showToast(message : String, font: UIFont) {
+
+        let toastLabel = UILabel(frame: CGRect(x: self.view.frame.size.width/2 - 75, y: self.view.frame.size.height-100, width: 150, height: 35))
+        toastLabel.backgroundColor = UIColor.black.withAlphaComponent(0.6)
+        toastLabel.textColor = UIColor.white
+        toastLabel.font = font
+        toastLabel.textAlignment = .center;
+        toastLabel.text = message
+        toastLabel.alpha = 1.0
+        toastLabel.layer.cornerRadius = 10;
+        toastLabel.clipsToBounds  =  true
+        self.view.addSubview(toastLabel)
+        UIView.animate(withDuration: 2.5, delay: 0.1, options: .curveEaseOut, animations: {
+             toastLabel.alpha = 0.0
+        }, completion: {(isCompleted) in
+            toastLabel.removeFromSuperview()
+        })
+    }
 }
 
 extension CartTableViewController: CartProductTableViewCellDelegate {
@@ -89,16 +108,19 @@ extension CartTableViewController: CartProductTableViewCellDelegate {
     func btTrash(with cartProduct: CartProduct) {
         cart.removeFromCart(cartProduct.getProduct(), 0, true)
         atualizar()
+        self.showToast(message: "Removido do carrinho", font: .systemFont(ofSize: 12.0))
     }
     
     func addToCart(with cartProduct: CartProduct, qtd: Int) {
         cart.addToCart(cartProduct.getProduct(), qtd)
         atualizar()
+        self.showToast(message: "Adicionado ao carrinho", font: .systemFont(ofSize: 12.0))
     }
     
     func removeFromCart(with cartProduct: CartProduct, qtd: Int) {
         cart.removeFromCart(cartProduct.getProduct(), qtd, false)
         atualizar()
+        self.showToast(message: "Removido do carrinho", font: .systemFont(ofSize: 12.0))
     }
     
 }
